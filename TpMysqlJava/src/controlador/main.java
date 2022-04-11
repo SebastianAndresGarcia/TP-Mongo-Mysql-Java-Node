@@ -30,7 +30,7 @@ public class main {
 		 * proceso debe ejecutarse para los códigos desde 1 hasta 300, contemplando que
 		 * si alguno de los códigos no retorna datos se continúe con el siguiente.
 		 */
-		for (int codigo = 70; codigo < 90; codigo++) {
+		for (int codigo = 0; codigo < 301; codigo++) {
 			URL url = new URL("https://restcountries.com/v2/callingcode/" + codigo);
 			try {
 				InputStreamReader inputStreamReader = new InputStreamReader(url.openStream());
@@ -47,13 +47,14 @@ public class main {
 					// "+paisesJSON.getlatlng().get(1));
 
 					String code = paisesJSON.getCallingCodes().get(0);
-					/*if (codeanterior == code) {
+					if (codeanterior.equals(code)&&paisesJSON.getCallingCodes().size()>1) {
 						code = paisesJSON.getCallingCodes().get(1);
 						 
-					} */
-					System.out.println("codigo " + code);
+					}
+					
+					//System.out.println("codigo " + code);
 					// insertar en tabla
-					try {
+					if(!code.equals(codeanterior)) {
 					pais pais = new pais();
 					pais.setCallingCodes(Integer.parseInt(code));
 					pais.setName(paisesJSON.getName());
@@ -61,13 +62,10 @@ public class main {
 					pais.setRegion(paisesJSON.getRegion());
 					pais.setPopulation(paisesJSON.getPopulation());
 					pais.setLatitud(paisesJSON.getlatlng().get(0));
-					pais.setLongitud(paisesJSON.getlatlng().get(1));
-
-					
-						paisDAO.guardarPais(pais);
-					} catch (Error e) {
-						System.out.println("Error: " + e.getMessage());
+					pais.setLongitud(paisesJSON.getlatlng().get(1));	
+					paisDAO.guardarPais(pais);
 					}
+					
 					codeanterior = code;
 				}
 			} catch (FileNotFoundException ex) {
