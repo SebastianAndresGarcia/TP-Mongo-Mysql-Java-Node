@@ -1,7 +1,7 @@
 //https://www.geeksforgeeks.org/node-js-mysql-insert-into-table/    , ver esto para modularizar
 
 var mysql = require('mysql');
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
 
 var con = mysql.createConnection({
     host: 'localhost',

@@ -1,39 +1,37 @@
-const con = require('../db/myConnection')
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-   /* var sql = "INSERT INTO paises(codigoPais, nombrePais,capitalPais,región,población,latitud,longitud) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    con.query(sql, function (err, result) {
-      if (err) throw err;
-      console.log("1 record inserted");
-    }); */
-  });
+const conexion = require('../db/mysqldb')
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-  
-/*
-const insertarPais = (req, res) => new Promise((resolve, reject) => {
-    const { codigoPais, nombrePais,capitalPais,región,población,latitud,longitud } = req.body;   
-    var values = [codigoPais, nombrePais,capitalPais,región,población,latitud,longitud];
-    mysqldb.getConnection((err, connection) => {
-        if (err) {
-            console.error(err);
-            res.send(err);
-            return;
-        }
-        else {
-            
-            let sql = 'INSERT INTO paises(codigoPais, nombrePais,capitalPais,región,población,latitud,longitud) VALUES (?, ?, ?, ?, ?, ?, ?)';
-            connection.query(sql, values, (err, results) => {
-                if (err) {
-                    console.error(err);
-                    res.json({ message: "Error al tratar de insertar" });
-                }
-                else {
-                    res.json({ message: "Empleado insertado con exito" });
-                }
+// limpio tabla paises
+conexion.query("DELETE FROM paises", function (err, result, fields) {
+    // if any error while executing above query, throw error
+    if (err) throw err;
+    // if there is no error, you have the result
+    console.log(result);
+});
+
+const obtenerDatos = async () => {
+    for (let i = 50; i < 60; i++) {
+
+        const arrayDatos = await fetch(`https://restcountries.com/v2/callingcode/${i}`).then(res => res.json())
+        // un valor
+        // resto de código
+        if (arrayDatos.status != '404') {
+            console.log(arrayDatos[0].name)
+            var codigo = arrayDatos[0].callingCodes[0]
+            if (codigoanterior === codigo)
+                codigo = arrayDatos[0].callingCodes[1]
+            var sql = `INSERT INTO paises(codigoPais, nombrePais,capitalPais,region,poblacion,latitud,longitud) VALUES (?);`;
+            let values = //[56, 'peru', 'Lima', 'America', 10000000, 45.0, 45.9]
+                [codigo, arrayDatos[0].name, arrayDatos[0].capital, arrayDatos[0].region, arrayDatos[0].population, arrayDatos[0].latlng[0], arrayDatos[0].latlng[1]];
+            var codigoanterior = codigo;
+            conexion.query(sql, [values], function (err, result) {
+                if (err) throw err;
+                console.log("1 record inserted " + result);
             });
         }
-    });
-}); */
+    }
+    console.log("terminado ciclo for")
+}
+obtenerDatos();
 
-exports.insertarPais = insertarPais;
+module.exports = { obtenerDatos };
