@@ -28,8 +28,8 @@ CREATE TABLE `paises` (
 `codigoPais` BIGINT UNSIGNED NOT NULL,
 `nombrePais` VARCHAR(50) NOT NULL,
 `capitalPais` VARCHAR(50) NOT NULL,
-`región` VARCHAR(50) NOT NULL,
-`población` BIGINT NOT NULL,
+`region` VARCHAR(50) NOT NULL,
+`poblacion` BIGINT NOT NULL,
 `latitud` numero DECIMAL NOT NULL,
 `longitud` numero DECIMAL NOT NULL,
 PRIMARY KEY (`codigoPais`)

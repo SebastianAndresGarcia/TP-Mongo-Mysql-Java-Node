@@ -9,31 +9,30 @@ app.get('/', (request, response) => {
     response.send('Hello Word')
 })
 
-/*const obtenerDatos = async () => {
-    for (let i = 50; i < 56; i++) {
+const obtenerDatos = async () => {
+    for (let i = 0; i < 301; i++) {
 
         const arrayDatos = await fetch(`https://restcountries.com/v2/callingcode/${i}`).then(res => res.json())
         // un valor
         // resto de código
         if (arrayDatos.status != '404') {
             console.log(arrayDatos[0].name)
-            con.connect(function (err) {
+            var codigo = arrayDatos[0].callingCodes[0]
+            if (codigoanterior === codigo)
+                codigo = arrayDatos[0].callingCodes[1]
+            var sql = `INSERT INTO paises(codigoPais, nombrePais,capitalPais,region,poblacion,latitud,longitud) VALUES (?);`;
+            let values = //[56, 'peru', 'Lima', 'America', 10000000, 45.0, 45.9]
+                [codigo, arrayDatos[0].name, arrayDatos[0].capital, arrayDatos[0].region, arrayDatos[0].population, arrayDatos[0].latlng[0], arrayDatos[0].latlng[1]];
+            var codigoanterior = codigo;
+            con.query(sql, [values], function (err, result) {
                 if (err) throw err;
-                console.log("Connected!");
-                var sql = "INSERT INTO paises(codigoPais, nombrePais,capitalPais,región,población,latitud,longitud) VALUES (?, ?, ?, ?, ?, ?, ?)";
-                con.query(sql, function (err, result) {
-                    if (err) throw err;
-                    console.log("1 record inserted "+result);
-                });
+                console.log("1 record inserted " + result);
             });
-
         }
     }
     console.log("terminado ciclo for")
-
 }
-obtenerDatos(); */
-
+obtenerDatos();
 
 
 app.listen(3000, () => {    //acá levanto al servidor en el puerto 3000
